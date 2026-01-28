@@ -21,8 +21,7 @@ def main():
     Docstring for main
 
     1.) At 9:30 get opening volume and price, download historical data for each ticker in list
-    3.) Define the month trend,low_net_avg,high_net_avg
-    4.)
+    2.) Define the month trend,low_net_avg,high_net_avg
     """
 
 if __name__ == "__main__":
