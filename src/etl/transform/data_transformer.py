@@ -27,6 +27,7 @@ class Data_Transformer:
             df = pd.concat([df.drop(columns='candles'), candles_df], axis=1)
             # Convert date time from epoch to human readable format
             df['datetime'] = pd.to_datetime(df['datetime'], unit='ms')
+            df['datetime'] = df['datetime'].dt.tz_localize('UTC').dt.tz_convert('America/New_York')
             df['datetime'] = df['datetime'].dt.strftime('%Y-%m-%d %I:%M %p')
             return df
         
