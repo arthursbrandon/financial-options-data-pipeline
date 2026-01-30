@@ -28,7 +28,7 @@ class schwab:
         except Exception as e:
             print(f'Error: {e}')
     
-    def getPriceHist(self,ticker):
+    def getPriceHist(self,ticker_list):
         """
         I've set the price_history variable to get daily price data.
         In order for the api call to go through you need a timestamp for the startDate and endDate parameters.
@@ -48,20 +48,23 @@ class schwab:
 
         end_timestamp = int(datetime.timestamp(timesamp)*1000)
         start_timestamp = int(datetime.timestamp(timesamp - timedelta(weeks=4))*1000)
-
+        
+        data = []
         try:
-            ticker_price_history = self.client.price_history(
-                symbol=ticker,
-                periodType='day',
-                period=1,
-                frequencyType='minute',
-                frequency=1,
-                startDate = start_timestamp,
-                endDate = end_timestamp,
-                needExtendedHoursData=True
-            ).json()
+            for ticker in ticker_list:
+                ticker_price_history = self.client.price_history(
+                    symbol=ticker,
+                    periodType='day',
+                    period=1,
+                    frequencyType='minute',
+                    frequency=1,
+                    startDate = start_timestamp,
+                    endDate = end_timestamp,
+                    needExtendedHoursData=True
+                ).json()
+                data.append(ticker_price_history)
 
-            return ticker_price_history
+            return data
         
         except Exception as e:
             print(f'Error: {e}')

@@ -1,8 +1,10 @@
 from etl.extract import schwab_api
 from etl.transform import data_transformer
+from etl.load import data_loader
 from dotenv import load_dotenv
 import os
 from datetime import datetime,timedelta,time
+import pandas as pd
 
 
 #API Details
@@ -13,26 +15,17 @@ api_secret = os.getenv("APP_SECRET")
 #ETL Classes
 api_extract = schwab_api.schwab(api_key,api_secret)
 transformer = data_transformer.Data_Transformer()
+loader = data_loader.Data_Loader()
 
 #List of tickers and data extraction
 ticker_list = ['SPY','QQQ','IWM','GLD','SLV']
 quoteData = transformer.clean_quotes(api_extract.getQuotes(ticker_list))
+historicalData = transformer.clean_historical(api_extract.getPriceHist(ticker_list))
+
 
 def main():
-    """
-    Docstring for main
-    1.) At 9:30 get opening volume and price, download historical data for each ticker in list
-    2.) Define the month trend,low_net_avg,high_net_avg
-    """
-    t = datetime.now().strftime("%H:%M %p")
-    d = datetime.now().isoweekday()
-    if d <= 5 and t == "09:30 AM":
-        pass #Placeholder for future code
-
-
-
-
-
+    
+    pass
 
 if __name__ == "__main__":
     main()
