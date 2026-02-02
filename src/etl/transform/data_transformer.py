@@ -10,6 +10,7 @@ class Data_Transformer:
             df = pd.DataFrame.from_dict(quoteData, orient='index')
             df = df['quote'].apply(pd.Series)
             df['tradeTime'] = pd.to_datetime(df['tradeTime'], unit='ms')
+            df['tradeTime'] = df['tradeTime'].dt.tz_localize('UTC').dt.tz_convert('America/New_York')
             df['tradeTime'] = df['tradeTime'].dt.strftime('%Y-%m-%d %I:%M %p')
             df.index.name = 'symbol'
             return df
@@ -18,6 +19,7 @@ class Data_Transformer:
     
     def clean_historical(self,historicalData):
         try:
+            
             data = [pd.DataFrame(d) for d in historicalData]
             # Combine into one dataframe
             df = pd.concat(data, ignore_index=True)
@@ -26,9 +28,9 @@ class Data_Transformer:
             # Merge back to original dataframe
             df = pd.concat([df.drop(columns='candles'), candles_df], axis=1)
             # Convert date time from epoch to human readable format
-            df['datetime'] = pd.to_datetime(df['datetime'], unit='ms')
-            df['datetime'] = df['datetime'].dt.tz_localize('UTC').dt.tz_convert('America/New_York')
-            df['datetime'] = df['datetime'].dt.strftime('%Y-%m-%d %I:%M %p')
+            df[f'datetime_readable'] = pd.to_datetime(df['datetime'], unit='ms')
+            df['datetime_readable'] = df['datetime_readable'].dt.tz_localize('UTC').dt.tz_convert('America/New_York')
+            df['datetime_readable'] = df['datetime_readable'].dt.strftime('%Y-%m-%d %I:%M %p')
             return df
         
         except Exception as e:
