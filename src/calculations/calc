@@ -1,0 +1,8 @@
+
+class Calc:
+
+    def __init__(self, ticker_list):
+        self.ticker_list = ticker_list
+        
+    
+    def get_netChange(self, historicalData_db, quoteData, timestamp_ms):
